@@ -28,7 +28,7 @@ module "ec2" {
   instance_type            = "t2.micro"
   tag_name                 = "Ubuntu Linux EC2"
   public_key               = var.public_key
-  subnet_id                = tolist(module.networking.dev_proj_1_public_subnets)[0]
+  subnet_id                = tolist(module.networking.dev_public_subnets)[0]
   sg_enable_ssh_https      = module.security_group.sg_ec2_sg_ssh_http_id
   ec2_sg_name_for_python_api     = module.security_group.sg_ec2_for_python_api
   enable_public_ip_address = true
@@ -50,7 +50,7 @@ module "alb" {
   is_external               = false
   lb_type                   = "application"
   sg_enable_ssh_https       = module.security_group.sg_ec2_sg_ssh_http_id
-  subnet_ids                = tolist(module.networking.dev_proj_1_public_subnets)
+  subnet_ids                = tolist(module.networking.dev_public_subnets)
   tag_name                  = "dev-proj-1-alb"
   lb_target_group_arn       = module.lb_target_group.dev_proj_1_lb_target_group_arn
   ec2_instance_id           = module.ec2.dev_proj_1_ec2_instance_id
@@ -79,7 +79,7 @@ module "aws_ceritification_manager" {
 module "rds_db_instance" {
   source               = "./rds"
   db_subnet_group_name = "dev_proj_1_rds_subnet_group"
-  subnet_groups        = tolist(module.networking.dev_proj_1_public_subnets)
+  subnet_groups        = tolist(module.networking.dev_public_subnets)
   rds_mysql_sg_id      = module.security_group.rds_mysql_sg_id
   mysql_db_identifier  = "mydb"
   mysql_username       = "dbuser"
